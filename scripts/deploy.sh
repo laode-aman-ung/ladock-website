@@ -27,7 +27,8 @@ DRY=""
 [ "${1:-}" = "-n" ] && DRY="--dry-run"
 
 EXCLUDES=(
-  --exclude 'downloads/'      # installers live on the server, never here
+  --exclude 'downloads/'         # installers live on the server, never here
+  --exclude '.snapshot-server/'  # local copy OF the server — never push it back
   --exclude '.git/'
   --exclude 'scripts/'
   --exclude 'CLAUDE.md'
@@ -58,14 +59,14 @@ Find the real document root on the server with:
 
 For a genuine first deploy, upload once without --delete:
 
-  rsync -avz ${EXCLUDES[*]} "$AKAR/" "$LADOCK_WEB_HOST:$LADOCK_WEB_PATH/"
+  rsync -rlptDvz ${EXCLUDES[*]} "$AKAR/" "$LADOCK_WEB_HOST:$LADOCK_WEB_PATH/"
 MSG
   exit 1
 fi
 
 # ── Preview, then confirm ────────────────────────────────────────────────
 echo "Changes to be applied:"
-rsync -az --delete --itemize-changes --dry-run "${EXCLUDES[@]}" \
+rsync -rlptDz --delete --itemize-changes --dry-run "${EXCLUDES[@]}" \
   "$AKAR/" "$LADOCK_WEB_HOST:$LADOCK_WEB_PATH/" | sed 's/^/  /'
 
 if [ -n "$DRY" ]; then
@@ -76,5 +77,5 @@ fi
 read -rp "Apply these changes to $LADOCK_WEB_HOST:$LADOCK_WEB_PATH ? [y/N] " ans
 [ "$ans" = "y" ] || { echo "Cancelled."; exit 0; }
 
-rsync -avz --delete "${EXCLUDES[@]}" "$AKAR/" "$LADOCK_WEB_HOST:$LADOCK_WEB_PATH/"
+rsync -rlptDvz --delete "${EXCLUDES[@]}" "$AKAR/" "$LADOCK_WEB_HOST:$LADOCK_WEB_PATH/"
 echo "Deployed to $LADOCK_WEB_HOST:$LADOCK_WEB_PATH"

@@ -7,32 +7,33 @@ Diperbarui: 2026-09-02 — PC Ubuntu 24 (`arga`)
 Repo baru. Baseline diambil dari situs live 2026-09-02, karena server lebih
 baru daripada salinan di repo produk.
 
-## ⛔ Jangan deploy dulu
+## Verifikasi server: LULUS (2026-09-02)
 
-`scripts/deploy.sh` memakai `rsync --delete` dan repo ini **belum terbukti
-lengkap**. Isinya dikumpulkan dengan menebak nama berkas lewat HTTP, cara yang
-tidak bisa melihat berkas yang tidak ditautkan dari halaman mana pun. Satu
-sudah kecolongan dengan cara itu (`LICENSE`), jadi mungkin ada yang lain.
+`scripts/snapshot-server.sh` dijalankan terhadap
+`root@148.230.103.166:/var/www/ladock`. Hasilnya bersih di ketiga daftar:
 
-Urutan wajib sebelum deploy pertama:
+```
+On the server but NOT in this repo   : (none)
+In this repo but not on the server   : (none)
+Present in both but DIFFERENT        : (none)
+```
 
-1. Isi `deploy.conf` — cari document root yang benar di server:
-   `ssh 148.230.103.166 "grep -r 'root ' /etc/nginx/sites-enabled/"`
-2. Jalankan `scripts/snapshot-server.sh` — hanya membaca, tidak menulis
-   apa pun ke server. Menampilkan tiga daftar: ada di server tapi tidak di
-   repo, ada di repo tapi tidak di server, dan yang berbeda isinya.
-3. Commit apa pun yang muncul di daftar pertama. Itu yang akan **terhapus**
-   kalau deploy dijalankan sekarang.
-4. Baru `scripts/deploy.sh -n`, lalu tanpa `-n`.
+Sembilan berkas di server — LICENSE, citation/docs/features/index/pricing.html,
+style.css, main.js, ladock_viewer.png — semuanya sudah ada di repo dengan isi
+identik. Repo terbukti lengkap, deploy aman dijalankan.
+
+Catatan: server ini juga menjalankan `osce.ladeep.id` dari
+`/opt/osce/frontend/dist`. Itu sebabnya `deploy.sh` menolak berjalan bila
+`index.html` tidak ditemukan di path tujuan — salah path dengan `rsync
+--delete` sebagai root akan menghapus proyek lain.
 
 ## Langkah berikutnya
 
-1. Kerjakan empat langkah di atas.
-2. Selesaikan perbedaan LICENSE (lihat bawah).
-3. Buat kunci SSH agar deploy tidak meminta kata sandi tiap kali:
-   `ssh-keygen -t ed25519 && ssh-copy-id root@148.230.103.166`
-4. Pertimbangkan berhenti deploy sebagai root; buat pengguna khusus yang
-   hanya berhak menulis ke document root.
+1. Selesaikan perbedaan LICENSE (lihat bawah).
+2. Pertimbangkan berhenti deploy sebagai root; buat pengguna khusus yang
+   hanya berhak menulis ke `/var/www/ladock`. Kunci root saat ini memberi
+   akses penuh ke seluruh server, termasuk proyek OSCE yang tidak
+   berhubungan.
 
 ## Tertunda / macet
 
@@ -42,7 +43,9 @@ Urutan wajib sebelum deploy pertama:
   produk berlisensi komersial ini perlu diseragamkan — salinan yang ada di
   repo ini diambil apa adanya dari server agar deploy tidak mengubah apa yang
   sedang tayang, bukan karena sudah dinyatakan benar.
-- Host dan path server belum tercatat; `deploy.conf` belum dibuat.
+- `deploy.conf` sudah dibuat di mesin ini (diabaikan git). Mesin kedua perlu
+  membuatnya sendiri: `LADOCK_WEB_HOST=root@148.230.103.166`,
+  `LADOCK_WEB_PATH=/var/www/ladock`.
 - `downloads/` sudah kosong di server (installer 404). Tautan unduhan versi
   live sudah menunjuk GitHub Releases, jadi tidak ada yang perlu diselamatkan.
 
