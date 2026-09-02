@@ -37,10 +37,14 @@ salinan lokal yang sudah basi.
    atau kredensial. Semua itu ada di `ladock-riset` yang privat.
 2. `downloads/` tidak masuk git. Installer dilayani dari server atau, lebih
    baik, dari GitHub Releases — `docs.html` versi live sudah menunjuk ke sana.
-3. Tautan unduhan pernah menunjuk `LADOCK-2.0.0-*` di `downloads/`, penomoran
+3. `bin/` di server berisi arsip engine (187 MB) yang diambil CI lewat
+   `LADOCK_BIN_BASE_URL`. Ada di dalam document root tapi **bukan** bagian
+   repo ini; `deploy.sh` mengecualikannya agar `rsync --delete` tidak
+   menghapusnya.
+4. Tautan unduhan pernah menunjuk `LADOCK-2.0.0-*` di `downloads/`, penomoran
    desktop lama yang sudah ditinggalkan. Versi live sudah dikoreksi ke
    GitHub Releases; jangan dikembalikan.
-4. `deploy.conf` berisi host dan path server. Diabaikan git — jangan
+5. `deploy.conf` berisi host dan path server. Diabaikan git — jangan
    di-commit.
 
 ## Aturan sesi

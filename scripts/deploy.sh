@@ -28,6 +28,7 @@ DRY=""
 
 EXCLUDES=(
   --exclude 'downloads/'         # installers live on the server, never here
+  --exclude 'bin/'               # engine archives for CI (187 MB), server-side only
   --exclude '.snapshot-server/'  # local copy OF the server — never push it back
   --exclude '.git/'
   --exclude 'scripts/'
