@@ -53,12 +53,21 @@
   <!-- Main Content -->
   <main class="docs-content">
     <h1>Documentation</h1>
-    <p class="lead">Complete guide to installing, configuring, and using LADOCK Desktop for molecular docking workflows.</p>
+    <p class="lead">Complete guide to installing, configuring, and using LADOCK for molecular docking workflows.</p>
+
+    <div class="callout callout-info">
+      <div class="callout-body"><strong>One package, two modes.</strong>
+      A single <code>pip install</code> gives you both. Use
+      <code>ladock-desktop</code> for the GUI workstation, or
+      <code>ladock-cli</code> for the rule-based agent — a guided wizard, or fully
+      scripted for batch work and reproducible runs. They share the same engines,
+      the same preparation pipeline and the same bundled binaries.</div>
+    </div>
 
     <!-- Requirements -->
     <section class="docs-section" id="requirements">
       <h2>📋 Requirements</h2>
-      <p>LADOCK Desktop requires the following software on your system before installation:</p>
+      <p>LADOCK requires the following software on your system before installation:</p>
       <table class="req-table">
         <thead>
           <tr><th>Dependency</th><th>Minimum Version</th><th>Notes</th></tr>
@@ -116,7 +125,7 @@
       <p>Open PowerShell or Command Prompt and run:</p>
       <pre><code># Clone the repository
 git clone https://github.com/laode-aman-ung/LADOCK.git
-cd ladock-desktop
+cd LADOCK
 
 # Install core dependencies
 python -m pip install -e .
@@ -126,7 +135,7 @@ python -m pip install -e ".[rdkit]"</code></pre>
 
       <h3>Linux / macOS</h3>
       <pre><code>git clone https://github.com/laode-aman-ung/LADOCK.git
-cd ladock-desktop
+cd LADOCK
 pip install -e .</code></pre>
 
       <h3>Using Conda (recommended)</h3>
@@ -161,8 +170,9 @@ ladock.bat</code></pre>
       <h3>Linux / macOS</h3>
       <pre><code>bash ladock.sh</code></pre>
 
-      <h3>Cross-platform (Python)</h3>
-      <pre><code>python main.py</code></pre>
+      <h3>Cross-platform (either mode)</h3>
+      <pre><code>ladock-desktop     # GUI workstation
+ladock-cli         # rule-based docking agent</code></pre>
 
       <div class="callout callout-warn">
         <span class="callout-icon">⚠️</span>
@@ -315,7 +325,7 @@ ladock.bat</code></pre>
     <!-- Platform Support -->
     <section class="docs-section" id="wsl">
       <h2>🖥️ Platform Support</h2>
-      <p>LADOCK Desktop runs natively on <strong>Windows</strong> and <strong>Linux</strong>. Each platform has a dedicated launcher and installer.</p>
+      <p>LADOCK runs natively on <strong>Windows</strong> and <strong>Linux</strong>. Each platform has a dedicated launcher and installer.</p>
 
       <h3>🪟 Windows (native)</h3>
       <p>Run LADOCK directly on Windows — no Linux or WSL required for CPU docking.</p>
@@ -380,7 +390,7 @@ ladock.bat</code></pre>
 <footer class="footer">
   <div class="container footer-inner">
     <div class="footer-brand">
-      <span class="logo-icon">⬡</span><span class="footer-name">LADOCK Desktop</span>
+      <span class="logo-icon">⬡</span><span class="footer-name">LADOCK</span>
       <p>Professional molecular docking workstation.</p>
     </div>
     <div class="footer-links">
