@@ -14,6 +14,7 @@
 # Usage:
 #   scripts/deploy.sh -n     dry run — show what would change, touch nothing
 #   scripts/deploy.sh        deploy for real (asks to confirm)
+#   scripts/deploy.sh -y     deploy without asking (for scripts and CI)
 #
 set -euo pipefail
 
@@ -24,7 +25,11 @@ AKAR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 : "${LADOCK_WEB_PATH:?set LADOCK_WEB_PATH, e.g. /var/www/ladock}"
 
 DRY=""
-[ "${1:-}" = "-n" ] && DRY="--dry-run"
+ASSUME_YES=""
+case "${1:-}" in
+  -n) DRY="--dry-run" ;;
+  -y) ASSUME_YES=1 ;;
+esac
 
 EXCLUDES=(
   --exclude 'downloads/'         # installers live on the server, never here
@@ -44,7 +49,7 @@ EXCLUDES=(
 # --delete as root against a mistyped path would wipe an unrelated directory.
 # Refuse unless the target already looks like this site.
 echo "Checking $LADOCK_WEB_HOST:$LADOCK_WEB_PATH ..."
-if ! ssh "$LADOCK_WEB_HOST" "test -f '$LADOCK_WEB_PATH/index.html'"; then
+if ! ssh -n "$LADOCK_WEB_HOST" "test -f '$LADOCK_WEB_PATH/index.html'"; then
   cat >&2 <<MSG
 REFUSING TO DEPLOY.
 
@@ -68,15 +73,17 @@ fi
 # ── Preview, then confirm ────────────────────────────────────────────────
 echo "Changes to be applied:"
 rsync -rlptDz --delete --itemize-changes --dry-run "${EXCLUDES[@]}" \
-  "$AKAR/" "$LADOCK_WEB_HOST:$LADOCK_WEB_PATH/" | sed 's/^/  /'
+  "$AKAR/" "$LADOCK_WEB_HOST:$LADOCK_WEB_PATH/" < /dev/null | sed 's/^/  /'
 
 if [ -n "$DRY" ]; then
   echo "Dry run only — nothing was changed."
   exit 0
 fi
 
-read -rp "Apply these changes to $LADOCK_WEB_HOST:$LADOCK_WEB_PATH ? [y/N] " ans
-[ "$ans" = "y" ] || { echo "Cancelled."; exit 0; }
+if [ -z "$ASSUME_YES" ]; then
+  read -rp "Apply these changes to $LADOCK_WEB_HOST:$LADOCK_WEB_PATH ? [y/N] " ans
+  [ "$ans" = "y" ] || { echo "Cancelled."; exit 0; }
+fi
 
 rsync -rlptDvz --delete "${EXCLUDES[@]}" "$AKAR/" "$LADOCK_WEB_HOST:$LADOCK_WEB_PATH/"
 echo "Deployed to $LADOCK_WEB_HOST:$LADOCK_WEB_PATH"
