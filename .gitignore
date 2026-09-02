@@ -21,3 +21,6 @@ Thumbs.db
 .vscode/
 .idea/
 *.swp
+
+# Snapshot server, hanya untuk pembandingan
+.snapshot-server/
