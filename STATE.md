@@ -4,75 +4,63 @@ Diperbarui: 2026-09-02 — PC Ubuntu 24 (`arga`)
 
 ## Sedang dikerjakan
 
-Repo baru. Baseline diambil dari situs live 2026-09-02, karena server lebih
-baru daripada salinan di repo produk.
+Tidak ada yang tergantung. Repo bersih, terdorong, dan **isinya sama persis
+dengan yang tayang** di ladock.ladeep.id — deploy terakhir dijalankan setelah
+perubahan terakhir.
 
-## Verifikasi server: LULUS (2026-09-02)
+## Yang berubah hari ini
+
+- Situs kini menampilkan LADOCK sebagai **satu produk dua mode**. Sebelumnya
+  "LADOCK Desktop" di 14 tempat dan CLI tidak disebut sama sekali — nol
+  kemunculan `ladock-cli` di kelima halaman, padahal kampanye pengujian 2026
+  justru menguji front-end itu.
+- `docs.html` dapat bagian CLI penuh dengan entri sidebar, diambil dari
+  `docs/cli.md` di repo produk. `features.html` dapat blok dua front-end.
+- Tombol Download hidup, membuka tab baru, menunjuk `releases/latest`.
+- Batas gratis dikoreksi dari **2030 ke 2029** di 13 tempat. Situs menjanjikan
+  setahun lebih lama daripada yang perangkat lunaknya izinkan.
+- `LICENSE` kini byte-identik dengan repo produk, memuat Surat Pencatatan
+  Ciptaan No. 001413018. Versi lama di server membatasi lisensi gratis hanya
+  untuk akademisi dengan email institusi terverifikasi — syarat yang tidak
+  pernah ada di perangkat lunaknya.
+- `deploy.sh` diperkuat: menolak jalan bila `index.html` tidak ditemukan di
+  path tujuan, menampilkan pratinjau, `-n` untuk uji kering, `-y` untuk
+  non-interaktif, dan `ssh -n` agar ssh tidak menelan jawaban konfirmasi.
+
+## Verifikasi server (2026-09-02)
 
 `scripts/snapshot-server.sh` dijalankan terhadap
-`root@148.230.103.166:/var/www/ladock`. Hasilnya bersih di ketiga daftar:
+`root@148.230.103.166:/var/www/ladock`. Ketiga daftar bersih — tidak ada
+berkas di server yang tidak ada di repo, dan sebaliknya.
 
-```
-On the server but NOT in this repo   : (none)
-In this repo but not on the server   : (none)
-Present in both but DIFFERENT        : (none)
-```
-
-Sembilan berkas di server — LICENSE, citation/docs/features/index/pricing.html,
-style.css, main.js, ladock_viewer.png — semuanya sudah ada di repo dengan isi
-identik. Repo terbukti lengkap, deploy aman dijalankan.
-
-Catatan: server ini juga menjalankan `osce.ladeep.id` dari
-`/opt/osce/frontend/dist`. Itu sebabnya `deploy.sh` menolak berjalan bila
-`index.html` tidak ditemukan di path tujuan — salah path dengan `rsync
---delete` sebagai root akan menghapus proyek lain.
-
-## ⚠️ docs.html belum di-deploy — sengaja
-
-Tombol unduhan sudah dipulihkan menjadi tautan ke
-`github.com/laode-aman-ung/LADOCK/releases/latest`, membuka tab baru sesuai
-konvensi tautan eksternal situs ini (`target="_blank" rel="noopener"`).
-
-Tapi rilis `v0.3.0` **masih draft**, sehingga `releases/latest` mengembalikan
-404 bagi pengunjung. Men-deploy sekarang akan mengembalikan persis masalah
-yang baru saja diperbaiki: tombol Download yang berujung di halaman kosong.
-
-**Deploy tepat setelah rilis diterbitkan**, tidak sebelumnya:
-
-```bash
-gh release edit v0.3.0 --draft=false     # di repo LADOCK
-scripts/deploy.sh                        # baru kemudian
-```
-
-Sampai saat itu, isi repo ini sengaja lebih maju daripada yang tayang.
+Catatan: host ini juga menjalankan `osce.ladeep.id` dari
+`/opt/osce/frontend/dist`. Itu sebabnya `deploy.sh` menolak berjalan pada path
+yang tidak dikenalinya — salah path dengan `rsync --delete` sebagai root akan
+menghapus proyek lain.
 
 ## Langkah berikutnya
 
-1. Selesaikan perbedaan LICENSE (lihat bawah).
-2. Pertimbangkan berhenti deploy sebagai root; buat pengguna khusus yang
-   hanya berhak menulis ke `/var/www/ladock`. Kunci root saat ini memberi
-   akses penuh ke seluruh server, termasuk proyek OSCE yang tidak
-   berhubungan.
+1. Pertimbangkan berhenti deploy sebagai `root`. Buat pengguna khusus yang
+   hanya berhak menulis ke `/var/www/ladock`; kunci root saat ini memberi
+   akses penuh ke seluruh server.
+2. Bila kelak ada rilis baru yang membawa installer, pastikan dibuat sebagai
+   rilis biasa — bukan pre-release — agar `releases/latest` ikut berpindah dan
+   tombol Download menunjuk yang benar.
 
 ## Tertunda / macet
 
-- **Dua teks LICENSE yang berbeda beredar publik.** Situs menyajikan
-  "LADOCK Desktop Software License, Copyright (c) 2024" (4.323 byte),
-  sedangkan repo produk `LADOCK` memuat teks lain. Keduanya publik. Untuk
-  produk berlisensi komersial ini perlu diseragamkan — salinan yang ada di
-  repo ini diambil apa adanya dari server agar deploy tidak mengubah apa yang
-  sedang tayang, bukan karena sudah dinyatakan benar.
-- `deploy.conf` sudah dibuat di mesin ini (diabaikan git). Mesin kedua perlu
+- `deploy.conf` hanya ada di mesin ini (diabaikan git). Mesin kedua perlu
   membuatnya sendiri: `LADOCK_WEB_HOST=root@148.230.103.166`,
   `LADOCK_WEB_PATH=/var/www/ladock`.
-- `downloads/` sudah kosong di server (installer 404). Tautan unduhan versi
-  live sudah menunjuk GitHub Releases, jadi tidak ada yang perlu diselamatkan.
+- `/var/www/ladock/bin/` di server berisi arsip engine 187 MB yang diambil CI
+  lewat secret `LADOCK_BIN_BASE_URL`. Ada di dalam document root tapi bukan
+  bagian repo ini; `deploy.sh` mengecualikannya agar `--delete` tidak
+  menghapusnya.
 
 ## Keputusan terakhir
 
-- 2026-09-02 — Situs dipisahkan ke repo sendiri, publik. Alasannya irama
-  rilis dan target deploy berbeda dari repo produk, dan keadaan sebelumnya
-  (3 dari 7 berkas terlacak di `LADOCK`, sisanya tidak di mana pun)
-  meninggalkan `style.css` tanpa versi sama sekali.
-- 2026-09-02 — Alur ditetapkan satu arah: repo → server.
-- 2026-09-02 — Deploy dikunci di balik verifikasi snapshot lebih dulu.
+- 2026-09-02 — Alur satu arah: repo → server. Sebelum repo ini ada, suntingan
+  dilakukan langsung di nginx, dan `docs.html` di server menyimpang selama
+  berbulan-bulan.
+- 2026-09-02 — Baseline diambil dari situs live, bukan dari salinan di repo
+  produk yang sudah basi.
