@@ -14,7 +14,22 @@ AKAR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 [ -f "$AKAR/deploy.conf" ] && . "$AKAR/deploy.conf"
 
 : "${LADOCK_WEB_HOST:?set LADOCK_WEB_HOST, e.g. root@148.230.103.166}"
-: "${LADOCK_WEB_PATH:?set LADOCK_WEB_PATH, e.g. /var/www/ladock}"
+
+# If the document root is not configured, list the candidates nginx knows
+# about and stop. Guessing it would be reckless: deploy.sh runs rsync --delete
+# against whatever this resolves to.
+if [ -z "${LADOCK_WEB_PATH:-}" ]; then
+  echo "LADOCK_WEB_PATH is not set. Asking nginx on $LADOCK_WEB_HOST ..."
+  echo
+  ssh "$LADOCK_WEB_HOST" \
+    "grep -rhE '^[[:space:]]*(root|server_name)' /etc/nginx/sites-enabled/ /etc/nginx/conf.d/ 2>/dev/null | sed 's/;//' | sed 's/^[[:space:]]*//'" \
+    | sed 's/^/  /'
+  echo
+  echo "Pick the root belonging to ladock.ladeep.id, then record it:"
+  echo
+  echo "  printf 'LADOCK_WEB_HOST=%s\\nLADOCK_WEB_PATH=/path/you/picked\\n' '$LADOCK_WEB_HOST' > deploy.conf"
+  exit 1
+fi
 
 SNAP="$AKAR/.snapshot-server"
 mkdir -p "$SNAP"
