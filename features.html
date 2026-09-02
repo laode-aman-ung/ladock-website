@@ -35,6 +35,34 @@
 <section class="features-detail section">
   <div class="container">
 
+    <!-- Two front-ends -->
+    <div class="feature-block">
+      <div class="feature-block-text">
+        <span class="section-badge">Two front-ends</span>
+        <h2>One package, GUI or command line</h2>
+        <p>A single <code>pip install ladock</code> installs both. They share the same
+        engines, the same preparation pipeline and the same bundled binaries — so a run
+        set up in one is the same run in the other.</p>
+        <ul>
+          <li><strong>ladock-desktop</strong> — PySide6 workstation with an embedded 3-D
+              viewer, job scheduler and result explorer</li>
+          <li><strong>ladock-cli</strong> — rule-based agent, <em>not an LLM</em>: a
+              guided wizard, or one command for batch and HPC work</li>
+          <li>The CLI writes plain CSV and a run manifest, so a docking campaign can be
+              repeated exactly and cited in a methods section</li>
+        </ul>
+      </div>
+      <div class="feature-visual">
+        <div style="text-align:center">
+          <pre style="text-align:left;font-size:0.8rem;overflow-x:auto"><code>$ ladock-cli dock \
+    --receptor target.pdb \
+    --ligand library.sdf \
+    --scoring vina vinardo \
+    --out results/run1</code></pre>
+        </div>
+      </div>
+    </div>
+
     <!-- Multi-engine Docking -->
     <div class="feature-block">
       <div class="feature-block-text">

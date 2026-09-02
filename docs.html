@@ -35,7 +35,8 @@
     </ul>
     <h4>Usage Guide</h4>
     <ul>
-      <li><a href="#usage" class="sidebar-link">Overview</a></li>
+      <li><a href="#cli" class="sidebar-link">CLI agent</a>
+          <a href="#usage" class="sidebar-link">Overview</a></li>
       <li><a href="#prepare" class="sidebar-link">Preparing Input</a></li>
       <li><a href="#configure" class="sidebar-link">Configuring Docking</a></li>
       <li><a href="#run" class="sidebar-link">Running a Docking Job</a></li>
@@ -89,7 +90,7 @@
 
     <!-- Installation -->
     <section class="docs-section" id="install">
-      <h2>⬇️ Download installers</h2>
+      <h2>⬇️ Download installers <span style="font-size:0.6em;color:var(--subtext0);font-weight:400">— desktop application</span></h2>
       <p>Each version ships a separate installer bundling only the engines it needs
       — no need to download 800&nbsp;MB of binaries for a platform you don't use.
       Free for non-commercial use until 2030.</p>
@@ -182,7 +183,62 @@ ladock-cli         # rule-based docking agent</code></pre>
 
     <!-- Usage Overview -->
     <section class="docs-section" id="usage">
-      <h2>📖 Usage Overview</h2>
+            <!-- CLI -->
+      <section class="docs-section" id="cli">
+        <h2>⌨️ The CLI agent</h2>
+        <p><code>ladock-cli</code> is a rule-based agent — <strong>not an LLM</strong>. It asks
+        the questions a docking run needs answered, checks the answers against the
+        engines actually installed, and then runs the job. Everything it does can also
+        be written as a single command, which is what makes runs reproducible.</p>
+
+        <div class="callout callout-info">
+          <div class="callout-body">The installers on this page contain the
+          <strong>desktop</strong> application. The CLI comes with the Python package:
+          <code>pip install ladock</code> gives you both <code>ladock-desktop</code> and
+          <code>ladock-cli</code>.</div>
+        </div>
+
+        <h3>Guided wizard</h3>
+        <p>Run it with no arguments and it walks you through receptor, ligands, box,
+        scoring functions and output directory:</p>
+        <pre><code>ladock-cli</code></pre>
+
+        <h3>Scripted</h3>
+        <p>The same run, written out — suitable for batch jobs, HPC schedulers, and
+        for pasting into a methods section:</p>
+        <pre><code>ladock-cli dock \
+  --receptor receptor_ready/target_prepared.pdb \
+  --ligand ligand_input/example.sdf \
+  --center 10.5 22.0 -4.5 \
+  --size 20 20 20 \
+  --scoring vina vinardo \
+  --out results/agent_run</code></pre>
+
+        <h3>Inspecting a structure</h3>
+        <p>List the chains, ligands, metals and waters the parser finds, so you know
+        what to keep before preparing the receptor:</p>
+        <pre><code>ladock-cli components receptor_ready/target_prepared.pdb</code></pre>
+
+        <h3>Redocking a native ligand</h3>
+        <p>Point the receptor and the ligand at the same complex and name the residue:</p>
+        <pre><code>ladock-cli dock \
+  --receptor receptor_ready/complex_prepared.pdb \
+  --ligand receptor_ready/complex_prepared.pdb \
+  --native-ligand LIG --native-chain A \
+  --scoring vina --out results/redock</code></pre>
+
+        <h3>MLSD — two ligands in one pocket</h3>
+        <p>Multiple Ligand Simultaneous Docking works on a <strong>pair</strong> of
+        different molecules sharing a pocket, with Vina or Vinardo:</p>
+        <pre><code>ladock-cli dock --simultaneous 2 --arrangement combination ...</code></pre>
+        <div class="callout callout-tip">
+          <span class="callout-icon">💡</span>
+          <div class="callout-body">Two is the ceiling — it is what the method is
+          defined for and what LADOCK validates against.</div>
+        </div>
+      </section>
+
+<h2>📖 Usage Overview</h2>
       <p>LADOCK organizes your work into <strong>Projects</strong>. A project contains your receptor, ligand library, docking configuration, and all results in one structured directory. The main window is divided into panels:</p>
       <ul>
         <li><strong>Docking Prep</strong> — load receptor and ligands, set search box</li>
