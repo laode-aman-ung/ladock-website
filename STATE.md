@@ -27,6 +27,25 @@ Catatan: server ini juga menjalankan `osce.ladeep.id` dari
 `index.html` tidak ditemukan di path tujuan — salah path dengan `rsync
 --delete` sebagai root akan menghapus proyek lain.
 
+## ⚠️ docs.html belum di-deploy — sengaja
+
+Tombol unduhan sudah dipulihkan menjadi tautan ke
+`github.com/laode-aman-ung/LADOCK/releases/latest`, membuka tab baru sesuai
+konvensi tautan eksternal situs ini (`target="_blank" rel="noopener"`).
+
+Tapi rilis `v0.3.0` **masih draft**, sehingga `releases/latest` mengembalikan
+404 bagi pengunjung. Men-deploy sekarang akan mengembalikan persis masalah
+yang baru saja diperbaiki: tombol Download yang berujung di halaman kosong.
+
+**Deploy tepat setelah rilis diterbitkan**, tidak sebelumnya:
+
+```bash
+gh release edit v0.3.0 --draft=false     # di repo LADOCK
+scripts/deploy.sh                        # baru kemudian
+```
+
+Sampai saat itu, isi repo ini sengaja lebih maju daripada yang tayang.
+
 ## Langkah berikutnya
 
 1. Selesaikan perbedaan LICENSE (lihat bawah).
