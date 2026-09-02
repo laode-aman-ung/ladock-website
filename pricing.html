@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pricing &amp; License — LADOCK</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Pricing-specific styles ── */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      margin-top: 48px;
+    }
+
+    .pricing-card {
+      background: var(--mantle);
+      border: 1px solid var(--surface0);
+      border-radius: var(--radius-lg);
+      padding: 36px 32px;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.2s;
+      position: relative;
+    }
+    .pricing-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-card);
+    }
+    .pricing-card.featured {
+      border-color: var(--blue);
+      background: linear-gradient(160deg, var(--mantle) 60%, rgba(137,180,250,0.07) 100%);
+    }
+    .pricing-card.featured::before {
+      content: 'Most Popular';
+      position: absolute;
+      top: -13px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--blue);
+      color: var(--crust);
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 3px 14px;
+      border-radius: 100px;
+      white-space: nowrap;
+      letter-spacing: 0.5px;
+    }
+
+    .plan-badge {
+      display: inline-block;
+      padding: 3px 12px;
+      border-radius: 100px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 16px;
+    }
+    .plan-badge.academic { background: rgba(148,226,213,0.15); color: var(--teal); }
+    .plan-badge.commercial { background: rgba(137,180,250,0.15); color: var(--blue); }
+    .plan-badge.post { background: rgba(203,166,247,0.15); color: var(--mauve); }
+
+    .plan-name {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    .plan-desc {
+      font-size: 0.875rem;
+      color: var(--subtext0);
+      line-height: 1.6;
+      margin-bottom: 28px;
+    }
+
+    .plan-price {
+      margin-bottom: 28px;
+    }
+    .price-amount {
+      font-size: 2.4rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1;
+    }
+    .price-amount.free { color: var(--teal); }
+    .price-amount.contact { font-size: 1.4rem; color: var(--blue); }
+    .price-note {
+      font-size: 0.8rem;
+      color: var(--overlay0);
+      margin-top: 6px;
+    }
+
+    .plan-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 32px;
+      flex: 1;
+    }
+    .plan-features li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 0.875rem;
+      color: var(--subtext1);
+      line-height: 1.5;
+    }
+    .plan-features li .check { color: var(--teal); flex-shrink: 0; font-weight: 700; }
+    .plan-features li .cross { color: var(--surface2); flex-shrink: 0; }
+
+    .plan-action { margin-top: auto; }
+
+    /* Timeline */
+    .timeline {
+      max-width: 700px;
+      margin: 0 auto;
+      position: relative;
+      padding-left: 32px;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 10px;
+      top: 8px;
+      bottom: 8px;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--teal), var(--blue), var(--mauve));
+    }
+    .timeline-item {
+      position: relative;
+      margin-bottom: 36px;
+    }
+    .timeline-item:last-child { margin-bottom: 0; }
+    .timeline-dot {
+      position: absolute;
+      left: -26px;
+      top: 4px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 2px solid var(--base);
+    }
+    .timeline-dot.teal { background: var(--teal); }
+    .timeline-dot.blue { background: var(--blue); }
+    .timeline-dot.mauve { background: var(--mauve); }
+
+    .timeline-year {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--overlay0);
+      margin-bottom: 4px;
+      font-family: var(--font-mono);
+    }
+    .timeline-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+    .timeline-desc {
+      font-size: 0.875rem;
+      color: var(--subtext0);
+      line-height: 1.6;
+    }
+
+    /* Contact form */
+    .contact-box {
+      max-width: 600px;
+      margin: 0 auto;
+      background: var(--mantle);
+      border: 1px solid var(--surface0);
+      border-radius: var(--radius-xl);
+      padding: 48px 40px;
+      text-align: center;
+    }
+    .contact-box h2 { font-size: 1.6rem; font-weight: 700; margin-bottom: 12px; }
+    .contact-box p { color: var(--subtext0); font-size: 0.95rem; margin-bottom: 32px; line-height: 1.7; }
+
+    .contact-options {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      text-align: left;
+    }
+    .contact-option {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: var(--base);
+      border: 1px solid var(--surface0);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      transition: border-color 0.2s;
+    }
+    .contact-option:hover { border-color: rgba(137,180,250,0.4); }
+    .contact-option-icon { font-size: 1.4rem; flex-shrink: 0; }
+    .contact-option-label { font-size: 0.75rem; color: var(--overlay0); text-transform: uppercase; letter-spacing: 0.6px; font-weight: 600; }
+    .contact-option-value { font-size: 0.9rem; color: var(--text); font-weight: 500; margin-top: 2px; }
+
+    .verify-box {
+      background: rgba(148,226,213,0.06);
+      border: 1px solid rgba(148,226,213,0.2);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      text-align: left;
+    }
+    .verify-box-icon { font-size: 1.3rem; flex-shrink: 0; }
+    .verify-box-text { font-size: 0.875rem; color: var(--subtext1); line-height: 1.65; }
+    .verify-box-text strong { color: var(--teal); }
+
+    @media (max-width: 600px) {
+      .contact-box { padding: 32px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo"><span class="logo-icon">⬡</span><span>LADOCK</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="features.html">Features</a></li>
+      <li><a href="docs.html">Documentation</a></li>
+      <li><a href="pricing.html" class="active">Pricing</a></li>
+      <li><a href="citation.html">Citation</a></li>
+    </ul>
+    <a href="#contact" class="btn btn-primary">Contact Us</a>
+    <button class="nav-toggle" id="navToggle"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="page-hero">
+  <div class="container">
+    <span class="section-badge">Pricing &amp; License</span>
+    <h1>Simple, transparent<br/><span class="gradient-text">licensing</span></h1>
+    <p>Free for everyone for non-commercial use until 2030 — no registration or license key required. Commercial and post-2030 academic licensing available — contact us for pricing.</p>
+  </div>
+</section>
+
+<!-- Pricing Cards -->
+<section class="section" style="background:var(--base)">
+  <div class="container">
+    <div class="pricing-grid">
+
+      <!-- Academic Free -->
+      <div class="pricing-card featured">
+        <span class="plan-badge academic">Free for everyone</span>
+        <div class="plan-name">Academic Free</div>
+        <div class="plan-desc">For anyone using LADOCK for non-commercial research, study, teaching, or evaluation — students, academics, and independent researchers alike.</div>
+        <div class="plan-price">
+          <div class="price-amount free">Free</div>
+          <div class="price-note">Until December 31, 2030 · No registration or license key needed</div>
+        </div>
+        <ul class="plan-features">
+          <li><span class="check">✓</span> All docking engines (Vina, AD4, VinaGPU, AD-GPU)</li>
+          <li><span class="check">✓</span> Unlimited batch docking</li>
+          <li><span class="check">✓</span> Ligand library manager</li>
+          <li><span class="check">✓</span> Interactive 3D viewer</li>
+          <li><span class="check">✓</span> Interaction analysis</li>
+          <li><span class="check">✓</span> Result export (CSV/XLSX)</li>
+          <li><span class="check">✓</span> WSL support</li>
+          <li><span class="cross">✗</span> Commercial use</li>
+        </ul>
+        <div class="plan-action">
+          <a href="docs.html#install" class="btn btn-primary" style="width:100%;justify-content:center">Download Free</a>
+        </div>
+      </div>
+
+      <!-- Commercial -->
+      <div class="pricing-card">
+        <span class="plan-badge commercial">Commercial</span>
+        <div class="plan-name">Commercial License</div>
+        <div class="plan-desc">For companies, CROs, pharma, and biotech organizations using LADOCK in a for-profit context.</div>
+        <div class="plan-price">
+          <div class="price-amount contact">Contact for Pricing</div>
+          <div class="price-note">Per seat or organization-wide — tailored to your needs</div>
+        </div>
+        <ul class="plan-features">
+          <li><span class="check">✓</span> All features in Academic Free</li>
+          <li><span class="check">✓</span> Commercial use permitted</li>
+          <li><span class="check">✓</span> Priority support</li>
+          <li><span class="check">✓</span> Custom integration assistance</li>
+          <li><span class="check">✓</span> Organization-wide deployment</li>
+          <li><span class="check">✓</span> Invoice &amp; formal licensing agreement</li>
+        </ul>
+        <div class="plan-action">
+          <a href="#contact" class="btn btn-outline" style="width:100%;justify-content:center">Contact Us →</a>
+        </div>
+      </div>
+
+      <!-- Post-2030 Academic -->
+      <div class="pricing-card">
+        <span class="plan-badge post">Academic (Post-2030)</span>
+        <div class="plan-name">Academic Discount</div>
+        <div class="plan-desc">For universities and research institutions after the free period ends on January 1, 2031.</div>
+        <div class="plan-price">
+          <div class="price-amount contact">Discounted Pricing</div>
+          <div class="price-note">Special rates for verified academic institutions</div>
+        </div>
+        <ul class="plan-features">
+          <li><span class="check">✓</span> All features in Academic Free</li>
+          <li><span class="check">✓</span> Significant discount vs. commercial</li>
+          <li><span class="check">✓</span> Verified via institutional email</li>
+          <li><span class="check">✓</span> Per-user or department licensing</li>
+          <li><span class="check">✓</span> Continued academic support</li>
+          <li><span class="cross">✗</span> Commercial use</li>
+        </ul>
+        <div class="plan-action">
+          <a href="#contact" class="btn btn-outline" style="width:100%;justify-content:center">Contact Us →</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- How to get it -->
+<section class="section" style="background:var(--mantle);padding-top:60px;padding-bottom:60px">
+  <div class="container" style="max-width:700px">
+    <div class="section-header" style="margin-bottom:32px">
+      <span class="section-badge">Getting started</span>
+      <h2>No registration required</h2>
+    </div>
+    <div class="verify-box">
+      <div class="verify-box-icon">🎓</div>
+      <div class="verify-box-text">
+        During the free period, LADOCK is available to <strong>everyone</strong> for
+        non-commercial use — no institutional email, registration, or license key is
+        needed. Just <strong>download and run</strong>; the app activates the free
+        academic license automatically until <strong>December 31, 2030</strong>.
+        <br/><br/>
+        The only limit is <strong>commercial use</strong>: companies, CROs,
+        pharmaceutical and biotech firms, or any for-profit R&amp;D require a paid
+        commercial license — contact <strong>laode_aman@ung.ac.id</strong>.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- License Timeline -->
+<section class="section" style="background:var(--base)">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-badge">License Timeline</span>
+      <h2>What happens and when</h2>
+    </div>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-dot teal"></div>
+        <div class="timeline-year">2024 — Now</div>
+        <div class="timeline-title">LADOCK launches · Academic free period begins</div>
+        <div class="timeline-desc">Everyone gets full access to LADOCK Desktop at no cost for non-commercial use — no registration needed. Commercial licensing available upon request.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot blue"></div>
+        <div class="timeline-year">2024 – 2030</div>
+        <div class="timeline-title">Academic Free Period</div>
+        <div class="timeline-desc">Anyone can use LADOCK free of charge for non-commercial research, study, and teaching. Only commercial (for-profit) users require a paid license.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot mauve"></div>
+        <div class="timeline-year">January 1, 2031</div>
+        <div class="timeline-title">Academic discount pricing begins</div>
+        <div class="timeline-desc">The free academic period ends. Existing and new academic users transition to a discounted institutional license. Contact us for renewal terms and pricing.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact -->
+<section class="section" id="contact" style="background:var(--mantle)">
+  <div class="container">
+    <div class="contact-box">
+      <div style="font-size:2.5rem;margin-bottom:16px">✉️</div>
+      <h2>Contact Us for Pricing</h2>
+      <p>Whether you need a commercial license, want to discuss academic renewal after 2030, or have questions about LADOCK licensing — we're happy to help.</p>
+      <div class="contact-options">
+        <div class="contact-option">
+          <div class="contact-option-icon">📧</div>
+          <div>
+            <div class="contact-option-label">Email</div>
+            <div class="contact-option-value">laode_aman@ung.ac.id</div>
+          </div>
+        </div>
+        <div class="contact-option">
+          <div class="contact-option-icon">📋</div>
+          <div>
+            <div class="contact-option-label">Subject line for commercial</div>
+            <div class="contact-option-value">LADOCK Commercial License Inquiry</div>
+          </div>
+        </div>
+        <div class="contact-option">
+          <div class="contact-option-icon">🎓</div>
+          <div>
+            <div class="contact-option-label">Subject line for academic renewal (post-2030)</div>
+            <div class="contact-option-value">LADOCK Academic License</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container footer-inner">
+    <div class="footer-brand">
+      <span class="logo-icon">⬡</span><span class="footer-name">LADOCK Desktop</span>
+      <p>Professional molecular docking workstation.</p>
+    </div>
+    <div class="footer-links">
+      <div class="footer-col">
+        <h4>Pages</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="features.html">Features</a></li>
+          <li><a href="docs.html">Documentation</a></li>
+          <li><a href="pricing.html">Pricing</a></li>
+          <li><a href="citation.html">Citation</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Licensing</h4>
+        <ul>
+          <li><a href="pricing.html#contact">Contact Us</a></li>
+          <li><a href="LICENSE">License File</a></li>
+          <li><a href="docs.html#install">Installation</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2024 LADOCK · All rights reserved.</p>
+    <p>LADOCK Desktop — All rights reserved. See <a href="LICENSE" style="color:var(--blue)">LICENSE</a> for terms.</p>
+  </div>
+</footer>
+
+<script src="main.js"></script>
+</body>
+</html>

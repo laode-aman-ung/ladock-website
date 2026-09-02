@@ -1,0 +1,23 @@
+# Installer binaries served by nginx — these live on the server or in
+# GitHub Releases, never in this repository.
+downloads/
+*.exe
+*.dmg
+*.deb
+*.AppImage
+
+# Kredensial deploy
+.env
+.env.*
+*.pem
+*.key
+id_rsa*
+id_ed25519*
+deploy.conf
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
