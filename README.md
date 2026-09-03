@@ -39,6 +39,6 @@ ikut terhapus.
 
 | Repo | Status | Isi |
 |---|---|---|
-| `laode-aman-ung/LADOCK` | publik | Produk: `ladock-cli` + `ladock-desktop` |
+| `laode-aman-ung/ladock` | publik | Produk: `ladock-cli` + `ladock-desktop` |
 | `laode-aman-ung/ladock-riset` | privat | HKI, naskah, luaran, pengujian |
 | `laode-aman-ung/ladock-website` | publik | repo ini |
